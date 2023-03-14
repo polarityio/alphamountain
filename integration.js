@@ -5,7 +5,7 @@ const { setLogger, getLogger } = require('./src/logging');
 const {
   buildIgnoreResults,
   organizeEntities,
-  parseErrorToReadableJSON
+  parseErrorToReadableJson
 } = require('./src/dataTransformations');
 
 const searchEntities = require('./src/searchEntities');
@@ -21,16 +21,14 @@ const doLookup = async (entities, userOptions, cb) => {
 
     const options = parseUserOptions(userOptions);
 
-    const { alerts, indicators, events } = await searchEntities(
+    const { categories } = await searchEntities(
       searchableEntities,
       options
     );
 
     const lookupResults = assembleLookupResults(
       entities,
-      alerts,
-      indicators,
-      events,
+      categories,
       options
     );
 
@@ -39,7 +37,7 @@ const doLookup = async (entities, userOptions, cb) => {
     Logger.trace({ lookupResults, ignoreResults }, 'Lookup Results');
     cb(null, lookupResults.concat(ignoreResults));
   } catch (error) {
-    const err = parseErrorToReadableJSON(error);
+    const err = parseErrorToReadableJson(error);
 
     Logger.error({ error, formattedError: err }, 'Get Lookup Results Failed');
     cb({ detail: error.message || 'Lookup Failed', err });

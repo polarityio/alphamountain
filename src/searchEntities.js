@@ -1,8 +1,9 @@
-const {} = require('./queries');
+const { getCategories } = require('./queries');
 
 const searchEntities = async (entities, options) => {
-
-  return null;
+  const categories = await getCategories(entities, options);
+  
+  return { categories };
 };
 
 module.exports = searchEntities;

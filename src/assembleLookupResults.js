@@ -1,12 +1,10 @@
 const { flow, get, size, find, eq, map, some, keys } = require('lodash/fp');
 
-const assembleLookupResults = (entities, alerts, indicators, events, options) =>
+const assembleLookupResults = (entities, categories, options) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
       entity,
-      alerts,
-      indicators,
-      events,
+      //TODO
       options
     );
 
@@ -25,21 +23,16 @@ const assembleLookupResults = (entities, alerts, indicators, events, options) =>
     return lookupResult;
   }, entities);
 
-const getResultsForThisEntity = (entity, alerts, indicators, events, options) => {
+const getResultsForThisEntity = (entity, /**TODO */ options) => {
   const getResultForThisEntityResult = (results) =>
     flow(find(flow(get('entity.value'), eq(entity.value))), get('result'))(results);
 
   return {
-    alerts: getResultForThisEntityResult(alerts),
-    indicators: getResultForThisEntityResult(indicators),
-    events: getResultForThisEntityResult(events)
   };
 };
 
-const createSummaryTags = ({ alerts, indicators, events }, options) =>
+const createSummaryTags = ({ /**TODO */ }, options) =>
   []
-  .concat(size(alerts) ? `Alerts: ${size(alerts)}` : [])
-  .concat(size(indicators) ? `Indicators: ${size(indicators)}` : [])
-  .concat(size(events) ? `Events: ${size(events)}` : []);
+  .concat();
 
 module.exports = assembleLookupResults;
