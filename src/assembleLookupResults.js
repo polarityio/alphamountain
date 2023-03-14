@@ -1,6 +1,6 @@
 const { flow, get, size, find, eq, map, some, keys } = require('lodash/fp');
 
-const assembleLookupResults = (entities, categories, options) =>
+const assembleLookupResults = (entities, categories, threatScore, options) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
       entity,

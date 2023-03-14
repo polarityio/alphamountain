@@ -1,9 +1,10 @@
-const { getCategories } = require('./queries');
+const { getCategories, getThreatScore } = require('./queries');
 
 const searchEntities = async (entities, options) => {
   const categories = await getCategories(entities, options);
-  
-  return { categories };
+  const threatScore = await getThreatScore(entities, options);
+
+  return { categories, threatScore };
 };
 
 module.exports = searchEntities;
