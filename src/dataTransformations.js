@@ -108,6 +108,8 @@ const buildIgnoreResults = map((entity) => ({
 const parseErrorToReadableJson = (error) =>
   JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
 
+const round = (value, decimals = 2) => Number(`${Math.round(`${value}e${decimals}`)}e-${decimals}`);
+
 module.exports = {
   organizeEntities,
   objectPromiseAll,
@@ -122,5 +124,6 @@ module.exports = {
   getSetCookies,
   encodeBase64,
   decodeBase64,
-  buildIgnoreResults
+  buildIgnoreResults,
+  round
 };

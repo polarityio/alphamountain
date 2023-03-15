@@ -1,7 +1,10 @@
 const { requestsInParallel } = require('../request');
-const { map } = require('lodash/fp');
+const { map, filter } = require('lodash/fp');
 
 const getThreatScore = async (entities, options) => {
+  //TODO: check isUrl key on entities
+  const urlEntities = filter((entity) => entity.isUrl, entities);
+
   const threatScoreRequests = map(
     (entity) => ({
       entity,
@@ -13,7 +16,7 @@ const getThreatScore = async (entities, options) => {
       },
       options
     }),
-    entities
+    urlEntities
   );
 
   const threatResponse = await requestsInParallel(threatScoreRequests, 'body.threat');

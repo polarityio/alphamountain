@@ -1,6 +1,5 @@
 const { get } = require('lodash/fp');
 
-
 const authenticateRequest = async (requestOptions) => ({
   ...requestOptions,
   url: `https://api.alphamountain.ai/${requestOptions.route}`,
@@ -9,8 +8,7 @@ const authenticateRequest = async (requestOptions) => ({
     version: 1,
     license: get('options.apiKey', requestOptions),
     type: 'partner.info'
-  },
-  
+  }
 });
 
 module.exports = authenticateRequest;
