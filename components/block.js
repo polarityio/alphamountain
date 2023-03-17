@@ -13,21 +13,22 @@ polarity.export = PolarityComponent.extend({
     this._super(...arguments);
   },
 
-  getApiEndpointQuota: function () {
+  getApiEndpointQuota: function (endpoint) {
     const outerThis = this;
 
     this.set('gettingQuotaMessage', '');
     this.set('gettingQuotaErrorMessage', '');
     this.set('getApiEndpointQuotaIsRunning', true);
 
+    // Pass the data to the integration
     this.sendIntegrationMessage({
       action: 'getApiEndpointQuota',
       data: {
-        endpoint: 'foo' //TODO
+        endpoint: endpoint
       }
     })
       .then((quota) => {
-        // TODO
+        outerThis.set('gettingQuotaMessage', `Quota: ${quota}`);
       })
       .catch((err) => {
         outerThis.set(
