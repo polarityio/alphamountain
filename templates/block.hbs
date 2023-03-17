@@ -1,1 +1,100 @@
-TODO
+<h1 class="p-title">
+  {{fa-icon "info-circle" fixedWidth=true}} Info
+</h1>
+<div id={{concat "alphamountain-container-" uniqueIdPrefix}}>
+  <li class="d-flex align-items-center justify-content-end copy-btn-container">
+    <button
+      class="btn copy-btn p-action"
+      title="Copy Information to Clipboard"
+      {{action "copyData"}}
+    >
+      {{fa-icon icon="clipboard" fixedWidth=true}}
+    </button>
+    <div class="copy-success-message {{if showCopyMessage "visible" "hidden"}}">
+      {{fa-icon icon="check" fixedWidth=true class="copy-success-icon"}}
+      Copied Information.
+    </div>
+  </li>
+
+<h1 class="p-title">
+  Threat Info
+</h1>
+  {{#if details.threatScore}}
+    {{#if details.threatScore.score}}
+      <div>
+        <span class="p-key">
+          Score:
+        </span>
+        <span class="p-value">
+          {{#if details.threatScore}}
+            {{details.threatScore.score}}&nbsp;
+            {{#if (lt details.threatScore.score 1)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-success"}}
+            {{else if (lt details.threatScore.score 3)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-warning"}}
+            {{else}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-danger"}}
+            {{/if}}
+          {{/if}}
+        </span>
+      </div>
+    {{/if}}
+    {{#if details.threatScore.scope}}
+      <div>
+        <span class="p-key">
+          Scope:
+        </span>
+        <span class="p-value">
+          {{#if details.threatScore}}
+            {{details.threatScore.score}}&nbsp;
+            {{#if (lt details.threatScore.score 1)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-success"}}
+            {{else if (lt details.threatScore.score 3)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-warning"}}
+            {{else}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-danger"}}
+            {{/if}}
+          {{/if}}
+        </span>
+      </div>
+    {{/if}}
+        {{#if details.threatScore.path}}
+      <div>
+        <span class="p-key">
+          Scope:
+        </span>
+        <span class="p-value">
+          {{#if details.threatScore}}
+            {{details.threatScore.score}}&nbsp;
+            {{#if (lt details.threatScore.score 1)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-success"}}
+            {{else if (lt details.threatScore.score 3)}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-warning"}}
+            {{else}}
+              {{fa-icon "exclamation-triangle" fixedWidth=true class="text-danger"}}
+            {{/if}}
+          {{/if}}
+        </span>
+      </div>
+    {{/if}}
+  {{/if}}
+
+<h1 class="p-title">
+  Category Info
+</h1>
+
+  {{#if details.categories}}
+    <div>
+      <span class="p-key">
+        Categories:
+      </span>
+      <span class="p-value">
+        {{join ", " details.categories.categoryNames}}
+      </span>
+    </div>
+  {{/if}}
+
+
+    
+  {{/if}}
+</div>

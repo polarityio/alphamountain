@@ -2,10 +2,10 @@ module.exports = {
   name: 'alphaMountain',
   acronym: 'AM',
   description:
-    "TODO",
-  entityTypes: [/** TODO */],
-  styles: ['./styles/styles.less'],
+    "asdfklads",
+  entityTypes: ['url'],
   defaultColor: 'light-blue', // TODO check to make sure correct color
+  styles: ['./styles/styles.less'],
   block: {
     component: {
       file: './components/block.js'
@@ -29,9 +29,9 @@ module.exports = {
     //https://github.com/polarityio/int-ui-code-reference/blob/master/user-options/config.js
     {
       key: 'apiKey',
-      name: 'Your API Token',
+      name: 'License/API Key',
       description:
-        'TODO',
+        'The License/API Key to use for accessing the alphaMountain API',
       default: '',
       type: 'password',
       userCanEdit: false,
