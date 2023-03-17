@@ -1,18 +1,19 @@
 const { getLogger } = require('../logging');
 const { requestsWithDefaults } = require('../request');
+const { getQuota } = require('../onMessage');
 
 const getApiEndpointQuota = async (
   {
-    // TODO
+    endpoint
   },
   options,
   callback
 ) => {
   const Logger = getLogger();
   try {
-    // TODO
+    const quota = await getQuota(endpoint, options);
 
-    callback(null, {});
+    callback(null, quota);
   } catch (error) {
     const err = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
     Logger.error(

@@ -3,14 +3,13 @@ const { map, filter } = require('lodash/fp');
 
 const getThreatScore = async (entities, options) => {
   //TODO: check isUrl key on entities
-  const urlEntities = filter((entity) => entity.isUrl, entities);
+  const urlEntities = filter((entity) => entity.isURL, entities);
 
   const threatScoreRequests = map(
     (entity) => ({
       entity,
       method: 'POST',
       route: 'threat/uri',
-      headers: { 'Content-Type': 'application/json' },
       body: {
         uri: entity.value
       },

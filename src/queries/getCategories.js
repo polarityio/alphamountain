@@ -3,14 +3,13 @@ const { map,filter } = require('lodash/fp');
 
 const getCategories = async (entities, options) => {
   // TODO: check isUrl key on entities
-  const urlEntities = filter((entity) => entity.isUrl, entities);
+  const urlEntities = filter((entity) => entity.isURL, entities);
 
   const categoryRequests = map(
     (entity) => ({
       entity,
       method: 'POST',
       route: 'category/uri',
-      headers: { 'Content-Type': 'application/json' },
       body: {
         uri: entity.value
       },

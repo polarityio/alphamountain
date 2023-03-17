@@ -10,7 +10,7 @@ const assembleLookupResults = (entities, categories, threatScore, options) =>
       options
     );
 
-    const resultsFound = flow(some(flow(keys, size)))(resultsForThisEntity);
+    const resultsFound = some(size, resultsForThisEntity);
 
     const lookupResult = {
       entity,
@@ -28,7 +28,9 @@ const assembleLookupResults = (entities, categories, threatScore, options) =>
 const getResultsForThisEntity = (entity, categories, threatScore, options) => {
   const categoriesForThisEntity = getResultForThisEntityResult(entity, categories);
 
-  const categoriesWithNames = {
+  const threatScoreForThisEntity = getResultForThisEntityResult(entity, threatScore);
+
+  const categoriesWithNames = categoriesForThisEntity && {
     ...categoriesForThisEntity,
     categoryNames: map(
       (categoryId) => getOr(`ID - ${categoryId}`, categoryId, CATAGORYID_BY_CATAGORYNAME),
@@ -36,17 +38,22 @@ const getResultsForThisEntity = (entity, categories, threatScore, options) => {
     )
   };
 
+  const truncatedThreatScore = threatScoreForThisEntity && {
+    ...threatScoreForThisEntity ,
+    score: round(get('score', threatScoreForThisEntity), 5)
+  };
+
   return {
     categories: categoriesWithNames,
-    threatScore: getResultForThisEntityResult(entity, threatScore)
+    threatScore: truncatedThreatScore
   };
 };
 
 const createSummaryTags = ({ categories, threatScore }, options) => {
   const categoryNames = get('categoryNames', categories);
   const roundedScore = round(get('score', threatScore));
-  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : undefined
-  
+  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : undefined;
+
   return [].concat(categoryNames || []).concat(threatScoreValue || []);
 };
 
