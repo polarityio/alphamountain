@@ -50,6 +50,10 @@ const doLookup = async (entities, userOptions, cb) => {
 const onMessage = ({ action, data: actionParams }, options, callback) =>
   onMessageFunctions[action](actionParams, options, callback);
 
+// const onMessage = (payload, options, callback) => {
+//   Logger.trace({ payload, options }, 'aaaaaaa');
+// };
+
 module.exports = {
   startup: setLogger,
   validateOptions,

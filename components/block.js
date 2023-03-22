@@ -1,56 +1,33 @@
 polarity.export = PolarityComponent.extend({
   details: Ember.computed.alias('block.data.details'),
   timezone: Ember.computed('Intl', function () {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const time = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('timezone', time);
+    return time;
   }),
   activeTab: 'TODO',
   gettingQuotaMessage: '',
   gettingQuotaErrorMessage: '',
   getApiEndpointQuotaIsRunning: false,
+  threatsQuotaIsRunning: false,
+  categoryQuotaIsRunning: false,
+  quotaInfo: {},
+  isRunningKeyMap: {
+    threat: 'threatsQuotaIsRunning',
+    category: 'categoriesQuotaIsRunning'
+  },
 
   init() {
     //TODO use or remove
     this._super(...arguments);
   },
 
-  getApiEndpointQuota: function (endpoint) {
-    const outerThis = this;
-
-    this.set('gettingQuotaMessage', '');
-    this.set('gettingQuotaErrorMessage', '');
-    this.set('getApiEndpointQuotaIsRunning', true);
-
-    // Pass the data to the integration
-    this.sendIntegrationMessage({
-      action: 'getApiEndpointQuota',
-      data: {
-        endpoint: endpoint
-      }
-    })
-      .then((quota) => {
-        outerThis.set('gettingQuotaMessage', `Quota: ${quota}`);
-      })
-      .catch((err) => {
-        outerThis.set(
-          'gettingQuotaErrorMessage',
-          `Failed to Get Quota: ${
-            (err &&
-              (err.detail || err.message || err.err || err.title || err.description)) ||
-            'Unknown Reason'
-          }`
-        );
-      })
-      .finally(() => {
-        this.set('getApiEndpointQuotaIsRunning', false);
-        outerThis.get('block').notifyPropertyChange('data');
-        setTimeout(() => {
-          outerThis.set('gettingQuotaMessage', '');
-          outerThis.set('gettingQuotaErrorMessage', '');
-          outerThis.get('block').notifyPropertyChange('data');
-        }, 5000);
-      });
-  },
   actions: {
+    getApiEndpointQuota: function (endpoint) {
+      this.getApiEndpointQuota(endpoint);
+      //console.log('getQuota', endpoint);
+    },
+
     changeTab: function (tabName) {
       this.set('activeTab', tabName);
 
@@ -67,21 +44,72 @@ polarity.export = PolarityComponent.extend({
       Ember.run.scheduleOnce('destroy', this, this.restoreCopyState);
     }
   },
-  copyElementToClipboard (element) {
+
+  getApiEndpointQuota: function (endpoint) {
+    console.log('getApiEndpointQuota', endpoint);
+
+    const outerThis = this;
+
+    this.set('gettingQuotaErrorMessage', '');
+    this.set('getApiEndpointQuotaIsRunning', true);
+
+    this.set(this.isRunningKeyMap[endpoint], true);
+
+    // Pass the data to the integration
+    this.sendIntegrationMessage({
+      action: 'getApiEndpointQuota',
+      data: {
+        endpoint: endpoint
+      }
+    })
+      .then((quota) => {
+        console.log('quota', quota);
+        this.set(
+          'quotaInfo',
+          Object.assign({}, this.get('quotaInfo'), { [endpoint]: quota })
+        );
+      })
+      .catch((err) => {
+        outerThis.set(
+          'gettingQuotaErrorMessage',
+          `Failed to Get Quota: ${
+            (err &&
+              (err.detail || err.message || err.err || err.title || err.description)) ||
+            'Unknown Reason'
+          }`
+        );
+      })
+      .finally(() => {
+        this.set('getApiEndpointQuotaIsRunning', false);
+        this.set(this.isRunningKeyMap[endpoint], false);
+
+        outerThis.get('block').notifyPropertyChange('data');
+        setTimeout(() => {
+          outerThis.set('gettingQuotaErrorMessage', '');
+          outerThis.get('block').notifyPropertyChange('data');
+        }, 5000);
+      });
+  },
+
+  copyElementToClipboard(element) {
     window.getSelection().removeAllRanges();
     let range = document.createRange();
 
-    range.selectNode(typeof element === 'string' ? document.getElementById(element) : element);
+    range.selectNode(
+      typeof element === 'string' ? document.getElementById(element) : element
+    );
     window.getSelection().addRange(range);
     document.execCommand('copy');
     window.getSelection().removeAllRanges();
   },
-  getElementRance (element) {
+  getElementRance(element) {
     let range = document.createRange();
-    range.selectNode(typeof element === 'string' ? document.getElementById(element) : element);
+    range.selectNode(
+      typeof element === 'string' ? document.getElementById(element) : element
+    );
     return range;
   },
-  restoreCopyState () {
+  restoreCopyState() {
     this.set('showCopyMessage', true);
 
     setTimeout(() => {
@@ -91,4 +119,3 @@ polarity.export = PolarityComponent.extend({
     }, 2000);
   }
 });
-

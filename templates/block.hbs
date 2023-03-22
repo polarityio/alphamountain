@@ -1,11 +1,7 @@
 {{#if details.threatScore}}
-  <button
-    class="btn copy-btn p-action"
-    {{action "getApiEndpointQuota" "threat" on="mouseUp"}}
-  >
-    {{fa-icon "info-circle" fixedWidth=true}} Threat Info
-  </button>
-
+  <span class="info-title">
+    <p>Threat Score:</p>
+  </span>
   {{#if details.threatScore.score}}
     <div>
       <span class="p-key">
@@ -45,15 +41,43 @@
       </span>
     </div>
   {{/if}}
+
+  {{#if quotaInfo.threat}}
+    <div class="quota-info-container">
+      <div class="quota-info">
+        Remaining Threat Queries:
+        {{quotaInfo.threat.remaining}}/{{quotaInfo.threat.daily}} - 
+        Resets:
+        {{moment-format quotaInfo.threat.key_expiry "HH:mm:ss MM/DD EDT" timeZone="EDT"}}
+      </div>
+    </div>
+  {{else}}
+    <div class="message-button-container get-quota">
+      <div class="d-flex flex-row align-items-center">
+        <button
+          class="p-btn btn btn-light mt-1"
+          disabled={{or getApiEndpointQuotaIsRunning gettingQuotaErrorMessage}}
+          {{action "getApiEndpointQuota" "threat"}}
+        >
+          Remaining Queries
+          {{#if threatsQuotaIsRunning}}
+            {{fa-icon "spinner-third" fixedWidth=true spin=true}}
+          {{/if}}
+        </button>
+      </div>
+      {{#if gettingQuotaErrorMessage}}
+        <div class="alert alert-danger mt-1">
+          {{gettingQuotaErrorMessage}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
 {{/if}}
 
 {{#if details.categories}}
-  <button
-    class="btn copy-btn p-action"
-    {{action "getApiEndpointQuota" "category" on="mouseUp"}}
-  >
-    {{fa-icon "info-circle" fixedWidth=true}} Category Info
-  </button>
+  <span class="info-title">
+    <p>Category Info:</p>
+  </span>
   <div>
     <span class="p-key">
       Categories:
@@ -70,4 +94,66 @@
       {{details.categories.confidence}}&nbsp;
     </span>
   </div>
+
+  {{#if quotaInfo.category}}
+    <div class="quota-info-container">
+      <div class="quota-info">
+        Remaining Category Queries:
+        {{quotaInfo.category.remaining}}/{{quotaInfo.category.daily}} - 
+        Resets:
+        {{moment-format
+          quotaInfo.category.key_expiry
+          "HH:mm:ss MM/DD EDT"
+          timeZone=timezone
+        }}
+      </div>
+    </div>
+  {{else}}
+    <div class="message-button-container get-quota">
+      <div class="d-flex flex-row align-items-center">
+        <button
+          class="p-btn btn btn-light mt-1"
+          disabled={{or getApiEndpointQuotaIsRunning gettingQuotaErrorMessage}}
+          {{action "getApiEndpointQuota" "category"}}
+        >
+          Remaining Queries
+          {{#if categoriesQuotaIsRunning}}
+            {{fa-icon "spinner-third" fixedWidth=true spin=true}}
+          {{/if}}
+        </button>
+      </div>
+      {{#if gettingQuotaErrorMessage}}
+        <div class="alert alert-danger mt-1">
+          {{gettingQuotaErrorMessage}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+{{/if}}
+
+{{#if gettingQuotaErrorMessage}}
+  {{#if (eq gettingQuotaErrorMessage "quota_exceeded")}}
+    <div class="alert alert-danger">
+      <strong>
+        Quota Exceeded
+      </strong>
+      <p>
+        You have exceeded your quota for this API endpoint. Please try again later.
+      </p>
+    </div>
+  {{else}}
+    <div class="alert alert-danger">
+      <strong>
+        Error
+      </strong>
+      <p>
+        {{gettingQuotaErrorMessage}}
+      </p>
+    </div>
+  {{/if}}
+{{/if}}
+{{#if gettingQuotaMessage}}
+  <span>
+    {{gettingQuotaMessage}}
+  </span>
 {{/if}}

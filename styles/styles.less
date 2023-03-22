@@ -2,3 +2,56 @@
   overflow-wrap: break-word !important;
   word-break: break-word !important;
 }
+
+.quota-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  & .quota-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #bbbbbb3d;
+    border-radius: inherit;
+    padding: 7px;
+    & .quota-info-icon {
+      margin-right: 10px;
+    }
+    & .quota-info-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: #273136;
+    }
+  }
+}
+
+.info-title {
+  font-size: 13px;
+  color: #273136;
+  margin-bottom: 18px;
+}
+
+.message-button-container {
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+  & button {
+    margin-right: 10px;
+    margin-top: 1px !important;
+    margin-bottom: 4px;
+    margin-left: 0 !important;
+
+    height: inherit;
+    padding: 7px 20px 7px 20px;
+
+    color: #fff;
+    background-color: #455768;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    min-width: 100px;
+  }
+}

@@ -1,6 +1,6 @@
 const { getLogger } = require('../logging');
-const { requestsWithDefaults } = require('../request');
-const { getQuota } = require('../onMessage');
+const { getQuota } = require('../queries');
+const { parseErrorToReadableJson } = require('../dataTransformations');
 
 const getApiEndpointQuota = async (
   {
@@ -12,10 +12,11 @@ const getApiEndpointQuota = async (
   const Logger = getLogger();
   try {
     const quota = await getQuota(endpoint, options);
-
+    
+    // throw new Error('Not work good. Request failed')
     callback(null, quota);
   } catch (error) {
-    const err = JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    const err = parseErrorToReadableJson(error);
     Logger.error(
       {
         detail: 'Failed API Quota Lookup',

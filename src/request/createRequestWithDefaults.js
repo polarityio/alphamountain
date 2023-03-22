@@ -98,6 +98,7 @@ const createRequestWithDefaults = () => {
         `Request Error${
           responseBodyErrors.message ? ` -> ${responseBodyErrors.message}` : ''
         }`
+        //`Request Error`
       );
       requestError.status = statusCodeNotSuccessful
         ? statusCode
