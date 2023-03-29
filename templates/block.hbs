@@ -1,23 +1,40 @@
 {{#if details.threatScore}}
-  <span class="info-title">
-    <p>Threat Score:</p>
-  </span>
   {{#if details.threatScore.score}}
+    <div class="top-section">
+      <div class="right-column">
+        <div class="score-container">
+          <div class="score-marker" style="left: calc({{threatScoreWidth}}% - 16px)">
+            <img
+              class="yeti-score-badge"
+              src="https://threatyeti.com/assets/shields/badge-{{
+                threatScoreIconColor
+              }}.png"
+              alt="V"
+            />
+          </div>
+          <div class="score-line"></div>
+          <div class="p-footnote score-footer">
+            Threat Score ({{details.threatScore.score}}
+            / 10)
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <h1 class="p-title info-title">
+    {{fa-icon icon="tachometer-slow" fixedWidth=true}}
+    <span>
+      Score Info:
+    </span>
+  </h1>
+
+  {{#if details.threatScore.source}}
     <div>
       <span class="p-key">
-        Score:
+        Source:
       </span>
       <span class="p-value">
-        {{#if details.threatScore}}
-          {{details.threatScore.score}}&nbsp;
-          {{#if (lt details.threatScore.score 2)}}
-            {{fa-icon "exclamation-triangle" fixedWidth=true class="text-success"}}
-          {{else if (lt details.threatScore.score 4)}}
-            {{fa-icon "exclamation-triangle" fixedWidth=true class="text-warning"}}
-          {{else}}
-            {{fa-icon "exclamation-triangle" fixedWidth=true class="text-danger"}}
-          {{/if}}
-        {{/if}}
+        {{details.threatScore.source}}&nbsp;
       </span>
     </div>
   {{/if}}
@@ -31,23 +48,12 @@
       </span>
     </div>
   {{/if}}
-  {{#if details.threatScore.source}}
-    <div>
-      <span class="p-key">
-        Source:
-      </span>
-      <span class="p-value">
-        {{details.threatScore.source}}&nbsp;
-      </span>
-    </div>
-  {{/if}}
-
   {{#if quotaInfo.threat}}
     <div class="quota-info-container">
       <div class="quota-info">
         Remaining Threat Queries:
-        {{quotaInfo.threat.remaining}}/{{quotaInfo.threat.daily}} - 
-        Resets:
+        {{quotaInfo.threat.remaining}}/{{quotaInfo.threat.daily}}
+        - Resets:
         {{moment-format quotaInfo.threat.key_expiry "HH:mm:ss MM/DD EDT" timeZone="EDT"}}
       </div>
     </div>
@@ -75,9 +81,15 @@
 {{/if}}
 
 {{#if details.categories}}
-  <span class="info-title">
-    <p>Category Info:</p>
-  </span>
+  {{#if details.threatScore}}
+    <hr class="section-separator" />
+  {{/if}}
+  <h1 class="p-title info-title">
+    {{fa-icon icon="layer-group" size="md" fixedWidth=true}}
+    <span>
+      Category Info:
+    </span>
+  </h1>
   <div>
     <span class="p-key">
       Categories:
@@ -86,6 +98,7 @@
       {{join ", " details.categories.categoryNames}}
     </span>
   </div>
+
   <div>
     <span class="p-key">
       Confidence:
@@ -95,12 +108,20 @@
     </span>
   </div>
 
+  <div>
+    <span class="p-key">
+      Scope:
+    </span>
+    <span class="p-value">
+      {{titleize details.categories.scope}}&nbsp;
+    </span>
+  </div>
   {{#if quotaInfo.category}}
     <div class="quota-info-container">
       <div class="quota-info">
         Remaining Category Queries:
-        {{quotaInfo.category.remaining}}/{{quotaInfo.category.daily}} - 
-        Resets:
+        {{quotaInfo.category.remaining}}/{{quotaInfo.category.daily}}
+        - Resets:
         {{moment-format
           quotaInfo.category.key_expiry
           "HH:mm:ss MM/DD EDT"
@@ -131,29 +152,23 @@
   {{/if}}
 {{/if}}
 
-{{#if gettingQuotaErrorMessage}}
-  {{#if (eq gettingQuotaErrorMessage "quota_exceeded")}}
-    <div class="alert alert-danger">
-      <strong>
-        Quota Exceeded
-      </strong>
-      <p>
-        You have exceeded your quota for this API endpoint. Please try again later.
-      </p>
-    </div>
-  {{else}}
-    <div class="alert alert-danger">
-      <strong>
-        Error
-      </strong>
-      <p>
-        {{gettingQuotaErrorMessage}}
-      </p>
-    </div>
-  {{/if}}
-{{/if}}
-{{#if gettingQuotaMessage}}
-  <span>
-    {{gettingQuotaMessage}}
-  </span>
+
+
+{{#if (gt details.impersonations.impersonate.length 0)}}
+  <hr class="section-separator" />
+  <h1 class="p-title info-title">
+    {{fa-icon icon="binoculars" size="md" fixedWidth=true}}
+    <span>
+      Impersonations:
+    </span>
+  </h1>
+  <ul class="impersonations-info">
+    {{#each details.impersonations.impersonate as |impersonation|}}
+      <li>
+        <span class="p-value">
+          {{impersonation}}
+        </span>
+      </li>
+    {{/each}}
+  </ul>
 {{/if}}

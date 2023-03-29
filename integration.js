@@ -21,17 +21,18 @@ const doLookup = async (entities, userOptions, cb) => {
 
     const options = parseUserOptions(userOptions);
 
-    const { categories, threatScore} = await searchEntities(
+    const { categories, threatScore, impersonations} = await searchEntities(
       searchableEntities,
       options
     );
 
-    Logger.trace({ categories, threatScore });
+    Logger.trace({ categories, threatScore, impersonations }, 'Search Results');
     
     const lookupResults = assembleLookupResults(
       entities,
       categories,
       threatScore,
+      impersonations,
       options
     );
 

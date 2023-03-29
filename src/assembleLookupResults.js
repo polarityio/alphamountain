@@ -1,12 +1,13 @@
-const { flow, get, size, find, eq, map, some, keys, getOr } = require('lodash/fp');
+const { flow, get, size, find, eq, map, some, keys, getOr, toLower } = require('lodash/fp');
 const { round } = require('./dataTransformations');
 const { CATAGORYID_BY_CATAGORYNAME } = require('./constants');
-const assembleLookupResults = (entities, categories, threatScore, options) =>
+const assembleLookupResults = (entities, categories, threatScore, impersonations, options) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
       entity,
       categories,
       threatScore,
+      impersonations,
       options
     );
 
@@ -25,10 +26,14 @@ const assembleLookupResults = (entities, categories, threatScore, options) =>
     return lookupResult;
   }, entities);
 
-const getResultsForThisEntity = (entity, categories, threatScore, options) => {
+const getResultsForThisEntity = (entity, categories, threatScore, impersonations, options) => {
   const categoriesForThisEntity = getResultForThisEntityResult(entity, categories);
 
   const threatScoreForThisEntity = getResultForThisEntityResult(entity, threatScore);
+
+  const impersonationsForThisEntity = getResultForThisEntityResult(entity, impersonations);
+
+  console.log('impersonationsForThisEntity', impersonationsForThisEntity);
 
   const categoriesWithNames = categoriesForThisEntity && {
     ...categoriesForThisEntity,
@@ -43,18 +48,27 @@ const getResultsForThisEntity = (entity, categories, threatScore, options) => {
     score: round(get('score', threatScoreForThisEntity), 5)
   };
 
+  const impersonationForThisEntity = impersonationsForThisEntity && {
+    ...impersonationsForThisEntity,
+    impersonations: get('impersonations', impersonationsForThisEntity)
+  };
+        
+
+
   return {
     categories: categoriesWithNames,
-    threatScore: truncatedThreatScore
+    threatScore: truncatedThreatScore,
+    impersonations: impersonationForThisEntity
   };
 };
 
-const createSummaryTags = ({ categories, threatScore }, options) => {
+const createSummaryTags = ({ categories, threatScore, impersonations }, options) => {
   const categoryNames = get('categoryNames', categories);
   const roundedScore = round(get('score', threatScore));
-  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : undefined;
+  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : [];
+  const impersonationTags = (toLower(impersonations.status.impersonate) === 'success'  && impersonations.impersonate.length > 0) ?  "Impersonations Found": [];
 
-  return [].concat(categoryNames || []).concat(threatScoreValue || []);
+  return [].concat(categoryNames || []).concat(threatScoreValue).concat(impersonationTags);
 };
 
 const getResultForThisEntityResult = (entity, results) => {

@@ -5,6 +5,7 @@ polarity.export = PolarityComponent.extend({
     console.log('timezone', time);
     return time;
   }),
+
   activeTab: 'TODO',
   gettingQuotaMessage: '',
   gettingQuotaErrorMessage: '',
@@ -16,9 +17,58 @@ polarity.export = PolarityComponent.extend({
     threat: 'threatsQuotaIsRunning',
     category: 'categoriesQuotaIsRunning'
   },
+  redThreat: '#ed2e4d',
+  greenThreat: '#7dd21b',
+  yellowThreat: '#ffc15d',
+  elementRadius: 20,
+  elementStrokeWidth: 4,
+  
+  threatScoreWidth: Ember.computed('details.threatScore.score', function () {
+    let reputation = this.get('details.threatScore.score');
 
+
+    return this.get('details.threatScore.score') * 10;
+  }),
+  elementCircumference: Ember.computed('elementRadius', function () {
+    return 2 * Math.PI * this.get('elementRadius');
+  }),
+  elementColor: Ember.computed('details.threatScore.score', function () {
+    return this._getThreatColor(this.get('details.threatScore.score'));
+  }),
+  elementStrokeOffset: Ember.computed(
+    'details.threatScore.score',
+    'elementCircumference',
+    function () {
+      return this._getStrokeOffset(this.get('details.threatScore.score'), this.get('elementCircumference'));
+    }
+  ),
+  threatScoreIconColor: Ember.computed('details.threatScore.score', function () {
+    let score = this.get('details.threatScore.score');
+    if (score > 4) {
+      return 'red';
+    }
+    if (score > 2) {
+      return 'orange';
+    }
+
+    return 'lime';
+  }),
+
+  _getStrokeOffset(score, circumference) {
+    let progress = score / 10;
+    return circumference * (1 - progress);
+  },
+  _getThreatColor(score) {
+    if (score > 4) {
+      return this.get('redThreat');
+    }else if (score > 2) {
+      return this.get('yellowThreat');
+    } else {
+      return this.get('greenThreat');
+    }
+  },
   init() {
-    //TODO use or remove
+    //TODO remove
     this._super(...arguments);
   },
 
