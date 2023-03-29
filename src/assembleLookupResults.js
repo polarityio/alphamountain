@@ -29,7 +29,7 @@ const assembleLookupResults = (entities, categories, threatScore, impersonations
 const getResultsForThisEntity = (entity, categories, threatScore, impersonations, options) => {
   const categoriesForThisEntity = getResultForThisEntityResult(entity, categories);
 
-  const threatScoreForThisEntity = getResultForThisEntityResult(entity, threatScore);
+  const threatScoreForThisEntity = get(entity.value, threatScore);
 
   const impersonationsForThisEntity = getResultForThisEntityResult(entity, impersonations);
 

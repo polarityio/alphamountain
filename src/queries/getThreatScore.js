@@ -1,24 +1,19 @@
-const { requestsInParallel } = require('../request');
-const { map, filter } = require('lodash/fp');
+const { requestWithDefaults } = require('../request');
+const { map, filter, get } = require('lodash/fp');
 
 const getThreatScore = async (entities, options) => {
-  //TODO: check isUrl key on entities
   const urlEntities = filter((entity) => entity.isURL, entities);
 
-  const threatScoreRequests = map(
-    (entity) => ({
-      entity,
+  const threatScoreRequests = {
       method: 'POST',
-      route: 'threat/uri',
+      route: 'threat/uris',
       body: {
-        uri: entity.value
+        uris: map((entity) => entity.value, urlEntities)
       },
       options
-    }),
-    urlEntities
-  );
+    };
 
-  const threatResponse = await requestsInParallel(threatScoreRequests, 'body.threat');
+  const threatResponse = get('body.scores', await requestWithDefaults(threatScoreRequests));
 
   return threatResponse;
 };
