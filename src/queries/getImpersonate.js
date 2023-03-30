@@ -1,12 +1,10 @@
 const { requestsInParallel } = require('../request');
-const { map,filter } = require('lodash/fp');
+const { map, filter, flow, get } = require('lodash/fp');
 
 const getImpersonate = async (entities, options) => {
-  // TODO: check isUrl key on entities
-  const urlEntities = filter((entity) => entity.isURL, entities);
-
-  const impersonateRequests = map(
-    (entity) => ({
+  const impersonateRequests = flow(
+    filter(get('isURL')), 
+    map((entity) => ({
       entity,
       method: 'POST',
       route: 'impersonate/uri',
@@ -14,14 +12,11 @@ const getImpersonate = async (entities, options) => {
         uri: entity.value
       },
       options
-    }),
-    urlEntities
-  );
+    })
+  ))(entities);
 
   const impersonateResponses = await requestsInParallel(impersonateRequests, 'body');
 
-  console.log('impersonateResponses', impersonateResponses);
-  
   return impersonateResponses;
 };
 

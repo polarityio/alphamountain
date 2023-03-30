@@ -1,4 +1,4 @@
-const { flow, get, size, find, eq, map, some, keys, getOr, toLower } = require('lodash/fp');
+const { flow, get, size, find, map, some, getOr } = require('lodash/fp');
 const { round } = require('./dataTransformations');
 const { CATAGORYID_BY_CATAGORYNAME } = require('./constants');
 const assembleLookupResults = (entities, categories, threatScore, impersonations, options) =>
@@ -33,15 +33,11 @@ const getResultsForThisEntity = (entity, categories, threatScore, impersonations
 
   const impersonationsForThisEntity = getResultForThisEntityResult(entity, impersonations);
 
-  console.log('impersonationsForThisEntity', impersonationsForThisEntity);
-
-  const categoriesWithNames = categoriesForThisEntity && {
-    ...categoriesForThisEntity,
-    categoryNames: map(
-      (categoryId) => getOr(`ID - ${categoryId}`, categoryId, CATAGORYID_BY_CATAGORYNAME),
-      get('categories', categoriesForThisEntity)
-    )
-  };
+  const categoriesWithNames = categoriesForThisEntity && flow(
+    get('categories'),
+    map(categoryId => getOr(`ID - ${categoryId}`, categoryId, CATAGORYID_BY_CATAGORYNAME)),
+    categoryNames => ({ ...categoriesForThisEntity, categoryNames })
+  )(categoriesForThisEntity);
 
   const truncatedThreatScore = threatScoreForThisEntity && {
     ...threatScoreForThisEntity ,
@@ -64,9 +60,9 @@ const getResultsForThisEntity = (entity, categories, threatScore, impersonations
 
 const createSummaryTags = ({ categories, threatScore, impersonations }, options) => {
   const categoryNames = get('categoryNames', categories);
-  const roundedScore = round(get('score', threatScore));
+  const roundedScore = flow(get('score'), round)(threatScore)
   const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : [];
-  const impersonationTags = (toLower(impersonations.status.impersonate) === 'success'  && impersonations.impersonate.length > 0) ?  "Impersonations Found": [];
+  const impersonationTags = (impersonations.impersonate && impersonations.impersonate.length) ?  "Impersonations Found": [];
 
   return [].concat(categoryNames || []).concat(threatScoreValue).concat(impersonationTags);
 };

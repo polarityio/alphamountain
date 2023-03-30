@@ -1,5 +1,5 @@
 'use strict';
-const { validateOptions, parseUserOptions } = require('./src/userOptions');
+const { validateOptions } = require('./src/userOptions');
 const { setLogger, getLogger } = require('./src/logging');
 
 const {
@@ -12,22 +12,19 @@ const searchEntities = require('./src/searchEntities');
 const assembleLookupResults = require('./src/assembleLookupResults');
 const onMessageFunctions = require('./src/onMessage');
 
-const doLookup = async (entities, userOptions, cb) => {
+const doLookup = async (entities, options, cb) => {
   const Logger = getLogger();
   try {
     Logger.debug({ entities }, 'Entities');
 
-    const { searchableEntities, nonSearchableEntities } = organizeEntities(entities);
 
-    const options = parseUserOptions(userOptions);
-
-    const { categories, threatScore, impersonations} = await searchEntities(
-      searchableEntities,
+    const { categories, threatScore, impersonations } = await searchEntities(
+      entities,
       options
     );
 
     Logger.trace({ categories, threatScore, impersonations }, 'Search Results');
-    
+
     const lookupResults = assembleLookupResults(
       entities,
       categories,
@@ -36,10 +33,8 @@ const doLookup = async (entities, userOptions, cb) => {
       options
     );
 
-    const ignoreResults = buildIgnoreResults(nonSearchableEntities);
-
-    Logger.trace({ lookupResults, ignoreResults }, 'Lookup Results');
-    cb(null, lookupResults.concat(ignoreResults));
+    Logger.trace({ lookupResults }, 'Lookup Results');
+    cb(null, lookupResults);
   } catch (error) {
     const err = parseErrorToReadableJson(error);
 
@@ -50,10 +45,6 @@ const doLookup = async (entities, userOptions, cb) => {
 
 const onMessage = ({ action, data: actionParams }, options, callback) =>
   onMessageFunctions[action](actionParams, options, callback);
-
-// const onMessage = (payload, options, callback) => {
-//   Logger.trace({ payload, options }, 'aaaaaaa');
-// };
 
 module.exports = {
   startup: setLogger,

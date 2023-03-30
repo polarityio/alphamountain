@@ -63,7 +63,7 @@
         <button
           class="p-btn btn btn-light mt-1"
           disabled={{or getApiEndpointQuotaIsRunning gettingQuotaErrorMessage}}
-          {{action "getApiEndpointQuota" "batch/threat"}}
+          {{action "getApiEndpointQuota" "threat"}}
         >
           Remaining Queries
           {{#if threatsQuotaIsRunning}}
