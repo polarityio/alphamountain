@@ -2,9 +2,9 @@ module.exports = {
   name: 'alphaMountain',
   acronym: 'AM',
   description:
-    "asdfklads",
+    'alphaMountain is a cutting-edge data analysis platform that harnesses the power of advanced algorithms and machine learning techniques to provide comprehensive risk scores, content categories, and possible impersonations.',
   entityTypes: ['url'],
-  defaultColor: 'light-blue', // TODO check to make sure correct color
+  defaultColor: 'light-blue',
   styles: ['./styles/styles.less'],
   block: {
     component: {
@@ -30,8 +30,7 @@ module.exports = {
     {
       key: 'apiKey',
       name: 'License/API Key',
-      description:
-        'The License/API Key to use for accessing the alphaMountain API',
+      description: 'The License/API Key to use for accessing the alphaMountain API',
       default: '',
       type: 'password',
       userCanEdit: false,
