@@ -3,8 +3,6 @@ const { validateOptions } = require('./src/userOptions');
 const { setLogger, getLogger } = require('./src/logging');
 
 const {
-  buildIgnoreResults,
-  organizeEntities,
   parseErrorToReadableJson
 } = require('./src/dataTransformations');
 

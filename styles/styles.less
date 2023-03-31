@@ -89,11 +89,6 @@ hr.section-separator {
   margin-left: 1px;
 }
 
-span.summary-threshold-message {
-  margin-right: 2px;
-  word-wrap: break-word !important;
-}
-
 .copy-btn-container {
   flex: 1 1 auto;
   position: absolute;
@@ -138,76 +133,6 @@ span.summary-threshold-message {
   }
 }
 
-.danger-summary-tag {
-  padding: 0 !important;
-
-  .icon-container {
-    //background-color: @danger-color;
-    height: 100%;
-    padding: 3px 2px;
-    margin-bottom: 0px;
-    display: inline-block;
-
-    svg {
-      margin-bottom: 1px;
-    }
-  }
-
-  .tag {
-    padding: 0.25em 0em 0.25em 0.25em;
-    display: inline-block;
-  }
-
-  .data {
-    padding: 0.25em 0.4em 0.25em 0em;
-    display: inline-block;
-  }
-
-  .stripe-bg-danger {
-    color: white;
-    background: repeating-linear-gradient(
-      45deg,
-      @danger-color,
-      @danger-color 5px,
-      lighten(@danger-color, 5%) 5px,
-      lighten(@danger-color, 5%) 10px
-    ) !important;
-  }
-
-  .stripe-bg-warning {
-    color: white;
-    background: repeating-linear-gradient(
-      45deg,
-      @warning-color,
-      @warning-color 5px,
-      lighten(@warning-color, 5%) 5px,
-      lighten(@warning-color, 5%) 10px
-    ) !important;
-  }
-}
-
-// Details block styles
-.expandable-title {
-  display: block;
-  color: #5ccd18 !important;
-  font-weight: 600;
-  margin-bottom: 5px;
-
-  & + .expandable-title {
-    margin-top: 10px;
-  }
-
-  .text {
-    color: #5ccd18 !important;
-    border-bottom: 1px solid #5ccd18;
-
-    .desc {
-      color: black !important;
-      font-weight: 400 !important;
-    }
-  }
-}
-
 pre {
   margin: 0px;
   white-space: pre-wrap;
@@ -215,27 +140,8 @@ pre {
   overflow-y: auto;
 }
 
-i {
-  font-size: 10px;
-}
-
-td.positives {
-  width: 60px;
-}
-
 .header-icon {
   font-size: 10px;
-}
-
-.scrollable-block {
-  overflow-y: auto;
-  max-height: 300px;
-  width: 100%;
-  border: 1px solid @border-color;
-
-  &.padded {
-    padding: 5px;
-  }
 }
 
 .toggle-header {
@@ -327,8 +233,4 @@ td.positives {
       width: 100%;
     }
   }
-}
-
-.name-list {
-  margin-top: 15px;
 }
