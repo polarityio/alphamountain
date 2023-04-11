@@ -2,7 +2,6 @@ polarity.export = PolarityComponent.extend({
   details: Ember.computed.alias('block.data.details'),
   timezone: Ember.computed('Intl', function () {
     const time = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log('timezone', time);
     return time;
   }),
 
@@ -19,7 +18,7 @@ polarity.export = PolarityComponent.extend({
   redThreat: '#ed2e4d',
   greenThreat: '#7dd21b',
   yellowThreat: '#ffc15d',
-  
+
   threatScoreWidth: Ember.computed('details.threatScore.score', function () {
     let reputation = this.get('details.threatScore.score');
 
@@ -40,7 +39,7 @@ polarity.export = PolarityComponent.extend({
   _getThreatColor(score) {
     if (score > 4) {
       return this.get('redThreat');
-    }else if (score > 2) {
+    } else if (score > 2) {
       return this.get('yellowThreat');
     } else {
       return this.get('greenThreat');
@@ -50,9 +49,7 @@ polarity.export = PolarityComponent.extend({
   actions: {
     getApiEndpointQuota: function (endpoint) {
       this.getApiEndpointQuota(endpoint);
-      //console.log('getQuota', endpoint);
     }
-
   },
 
   getApiEndpointQuota: function (endpoint) {
@@ -73,14 +70,13 @@ polarity.export = PolarityComponent.extend({
       }
     })
       .then((quota) => {
-        console.log('quota', quota);
         this.set(
           'quotaInfo',
           Object.assign({}, this.get('quotaInfo'), { [endpoint]: quota })
         );
       })
       .catch((err) => {
-        outerThis.set(
+        this.set(
           'gettingQuotaErrorMessage',
           `Failed to Get Quota: ${
             (err &&
@@ -93,10 +89,10 @@ polarity.export = PolarityComponent.extend({
         this.set('getApiEndpointQuotaIsRunning', false);
         this.set(this.isRunningKeyMap[endpoint], false);
 
-        outerThis.get('block').notifyPropertyChange('data');
+        this.get('block').notifyPropertyChange('data');
         setTimeout(() => {
-          outerThis.set('gettingQuotaErrorMessage', '');
-          outerThis.get('block').notifyPropertyChange('data');
+          this.set('gettingQuotaErrorMessage', '');
+          this.get('block').notifyPropertyChange('data');
         }, 5000);
       });
   }
