@@ -36,16 +36,6 @@ polarity.export = PolarityComponent.extend({
     return 'lime';
   }),
 
-  _getThreatColor(score) {
-    if (score > 4) {
-      return this.get('redThreat');
-    } else if (score > 2) {
-      return this.get('yellowThreat');
-    } else {
-      return this.get('greenThreat');
-    }
-  },
-
   actions: {
     getApiEndpointQuota: function (endpoint) {
       this.getApiEndpointQuota(endpoint);
@@ -53,10 +43,6 @@ polarity.export = PolarityComponent.extend({
   },
 
   getApiEndpointQuota: function (endpoint) {
-    console.log('getApiEndpointQuota', endpoint);
-
-    const outerThis = this;
-
     this.set('gettingQuotaErrorMessage', '');
     this.set('getApiEndpointQuotaIsRunning', true);
 

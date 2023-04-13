@@ -1,6 +1,6 @@
 # Polarity alphaMountain Integration
 
-Polarity's alphaMountain integration provides users with access to alphaMountain's powerful data analysis capabilities for URL lookup, which allows for quick evaluations, detection and decision-making.
+The Polarity alphaMountain integration uses the API used in threatYeti to searches URLs for a Threat Score, Category and possible Impersonations
 
 alphaMountain is a cutting-edge data analysis platform that harnesses the power of advanced algorithms and machine learning techniques to provide comprehensive risk scores, content categories, and possible impersonations. For more information about alphaMountain, please visit the [official website](https://www.alphamountain.com).
 
