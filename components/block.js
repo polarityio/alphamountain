@@ -27,13 +27,13 @@ polarity.export = PolarityComponent.extend({
   threatScoreIconColor: Ember.computed('details.threatScore.score', function () {
     let score = this.get('details.threatScore.score');
     if (score > 4) {
-      return 'red';
+      return 'high-risk';
     }
     if (score > 2) {
-      return 'orange';
+      return 'warning-risk';
     }
 
-    return 'lime';
+    return 'low-risk';
   }),
 
   actions: {
@@ -52,7 +52,7 @@ polarity.export = PolarityComponent.extend({
     this.sendIntegrationMessage({
       action: 'getApiEndpointQuota',
       data: {
-        endpoint: endpoint
+        endpoint
       }
     })
       .then((quota) => {
@@ -73,12 +73,14 @@ polarity.export = PolarityComponent.extend({
       })
       .finally(() => {
         this.set('getApiEndpointQuotaIsRunning', false);
-        this.set(this.isRunningKeyMap[endpoint], false);
+        this.set(`isRunningKeyMap.${endpoint}`, true);
 
         this.get('block').notifyPropertyChange('data');
         setTimeout(() => {
-          this.set('gettingQuotaErrorMessage', '');
-          this.get('block').notifyPropertyChange('data');
+          if (this.get('isDestroyed')) {
+            this.set('gettingQuotaErrorMessage', '');
+            this.get('block').notifyPropertyChange('data');
+          }
         }, 5000);
       });
   }

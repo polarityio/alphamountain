@@ -4,13 +4,13 @@
       <div class="right-column">
         <div class="score-container">
           <div class="score-marker" style="left: calc({{threatScoreWidth}}% - 16px)">
-            <img
-              class="yeti-score-badge"
-              src="https://threatyeti.com/assets/shields/badge-{{
-                threatScoreIconColor
-              }}.png"
-              alt="V"
-            />
+            <span class="fa-stack shield-with-alpha">
+              {{fa-icon icon="shield" size="md" class=threatScoreIconColor}}
+
+              <span class="alpha-symbol">
+                α
+              </span>
+            </span>
           </div>
           <div class="score-line"></div>
           <div class="p-footnote score-footer">
@@ -21,7 +21,7 @@
       </div>
     </div>
   {{/if}}
-  <h1 class="p-title info-title">
+  <h1 class="p-header info-title">
     {{fa-icon icon="tachometer-slow" fixedWidth=true}}
     <span>
       Score Info:
@@ -84,7 +84,7 @@
   {{#if details.threatScore}}
     <hr class="section-separator" />
   {{/if}}
-  <h1 class="p-title info-title">
+  <h1 class="p-header info-title">
     {{fa-icon icon="layer-group" size="md" fixedWidth=true}}
     <span>
       Category Info:
@@ -152,23 +152,19 @@
   {{/if}}
 {{/if}}
 
-
-
 {{#if (gt details.impersonations.impersonate.length 0)}}
   <hr class="section-separator" />
-  <h1 class="p-title info-title">
+  <h1 class="p-header info-title">
     {{fa-icon icon="binoculars" size="md" fixedWidth=true}}
     <span>
       Impersonations:
     </span>
   </h1>
-  <ul class="impersonations-info">
+  <div class="impersonations-info">
     {{#each details.impersonations.impersonate as |impersonation|}}
-      <li>
-        <span class="p-value">
-          {{impersonation}}
-        </span>
-      </li>
+      <div class="impersonation-info">
+        {{impersonation}}
+      </div>
     {{/each}}
-  </ul>
+  </div>
 {{/if}}

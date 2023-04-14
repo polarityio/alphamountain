@@ -32,18 +32,30 @@ hr.section-separator {
   margin-bottom: 10px;
 }
 
-.info-title {
-  margin-top: 5px;
-  font-size: 13px;
-  color: #273136;
-  font-weight: 700;
-  width: fit-content;
+.shield-with-alpha {
+  font-size: 1.4em;
+  transform: translateY(-10px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
 
-  span {
-    border-bottom: 1px solid #273136;
+  .alpha-symbol {
+    font-size: 1em;
+    color: white;
+    position: absolute;
+    left: 10%;
+    top: 4%;
+    transform: rotateX(37deg);
   }
-  svg {
-    font-size: 11px;
+
+  .high-risk {
+    color: @danger-color;
+  }
+  .warning-risk {
+    color: @warning-color;
+  }
+  .low-risk {
+    color: @success-color;
   }
 }
 
@@ -68,6 +80,25 @@ hr.section-separator {
   }
 }
 
+.impersonations-info {
+  display: flex;
+
+  .impersonation-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #bbbbbb3d;
+    border-radius: inherit;
+    padding: 7px;
+    margin-right: 10px;
+    & .impersonation-info-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: #273136;
+    }
+  }
+}
+
 @border-color: #dee2e6;
 @danger-color: #ff4559;
 @success-color: #5cb85c;
@@ -87,50 +118,6 @@ hr.section-separator {
 .summary-icon {
   margin-bottom: 1px;
   margin-left: 1px;
-}
-
-.copy-btn-container {
-  flex: 1 1 auto;
-  position: absolute;
-  right: 10px;
-  top: 7px;
-
-  .copy-btn {
-    font-size: 12px;
-    padding: 0px;
-    height: 20px;
-
-    :active {
-      color: darken(#388e3c, 5%);
-    }
-  }
-
-  .copy-success-message {
-    position: absolute;
-    top: 20px;
-    right: 0px;
-    background-color: rgb(222, 226, 230);
-    min-width: max-content;
-    padding: 5px;
-    border-radius: 3px;
-    z-index: 999;
-
-    .copy-success-icon {
-      color: #aaa;
-    }
-
-    &.visible {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.25s linear;
-    }
-
-    &.hidden {
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0s 0.25s, opacity 0.25s linear;
-    }
-  }
 }
 
 pre {
@@ -209,10 +196,6 @@ pre {
 
       .score-marker-icon {
         size: 20px;
-      }
-      .yeti-score-badge {
-        width: 17px;
-        height: 17px;
       }
     }
 
