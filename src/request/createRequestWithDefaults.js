@@ -91,19 +91,10 @@ const createRequestWithDefaults = () => {
     const roundedStatus = Math.round(statusCode / 100) * 100;
     const statusCodeNotSuccessful =
       !SUCCESSFUL_ROUNDED_REQUEST_STATUS_CODES.includes(roundedStatus);
-    const responseBodyErrors = get('errors.0', body);
 
-    if (statusCodeNotSuccessful || responseBodyErrors) {
-      const requestError = Error(
-        `Request Error${
-          responseBodyErrors.message ? ` -> ${responseBodyErrors.message}` : ''
-        }`
-        //`Request Error`
-      );
-      requestError.status = statusCodeNotSuccessful
-        ? statusCode
-        : get('extensions.code', responseBodyErrors);
-      requestError.detail = get(get('error', body), ERROR_MESSAGES);
+    if (statusCodeNotSuccessful) {
+      const requestError = Error(`Request Error`);
+      requestError.status = statusCode;
       requestError.description = JSON.stringify(body);
       requestError.requestOptions = JSON.stringify(requestOptionsWithoutSensitiveData);
       throw requestError;
