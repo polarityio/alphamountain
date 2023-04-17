@@ -1,9 +1,7 @@
 const { requestsInParallel } = require('../request');
-const { map, filter } = require('lodash/fp');
+const { map } = require('lodash/fp');
 
 const getCategories = async (entities, options) => {
-  const urlEntities = filter((entity) => entity.isURL, entities);
-
   const categoryRequests = map(
     (entity) => ({
       entity,
@@ -14,7 +12,7 @@ const getCategories = async (entities, options) => {
       },
       options
     }),
-    urlEntities
+    entities
   );
 
   const categoryResponses = await requestsInParallel(categoryRequests, 'body.category');

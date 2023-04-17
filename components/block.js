@@ -20,8 +20,6 @@ polarity.export = PolarityComponent.extend({
   yellowThreat: '#ffc15d',
 
   threatScoreWidth: Ember.computed('details.threatScore.score', function () {
-    let reputation = this.get('details.threatScore.score');
-
     return this.get('details.threatScore.score') * 10;
   }),
   threatScoreIconColor: Ember.computed('details.threatScore.score', function () {
@@ -77,7 +75,7 @@ polarity.export = PolarityComponent.extend({
 
         this.get('block').notifyPropertyChange('data');
         setTimeout(() => {
-          if (this.get('isDestroyed')) {
+          if (!this.get('isDestroyed')) {
             this.set('gettingQuotaErrorMessage', '');
             this.get('block').notifyPropertyChange('data');
           }
