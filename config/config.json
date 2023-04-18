@@ -1,6 +1,6 @@
 {
-  "polarityIntegrationUuid":"c7c29ba0-de16-11ed-838b-7d68cd168940",
   "name": "alphaMountain",
+  "polarityIntegrationUuid": "c7c29ba0-de16-11ed-838b-7d68cd168940",
   "acronym": "AM",
   "description": "alphaMountain is a cutting-edge data analysis platform that harnesses the power of advanced algorithms and machine learning techniques to provide comprehensive risk scores, content categories, and possible impersonations.",
   "entityTypes": ["url"],
