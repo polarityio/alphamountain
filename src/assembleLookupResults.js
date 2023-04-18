@@ -39,15 +39,6 @@ const getResultsForThisEntity = (
   impersonations,
   options
 ) => {
-  const categoriesForThisEntity = getResultForThisEntityResult(entity, categories);
-
-  const threatScoreForThisEntity = getResultForThisEntityResult(entity, threatScore);
-
-  const impersonationsForThisEntity = getResultForThisEntityResult(
-    entity,
-    impersonations
-  );
-
   const categoriesWithNames =
     categoriesForThisEntity &&
     flow(
@@ -58,45 +49,17 @@ const getResultsForThisEntity = (
       (categoryNames) => ({ ...categoriesForThisEntity, categoryNames })
     )(categoriesForThisEntity);
 
-  const truncatedThreatScore = threatScoreForThisEntity && {
-    ...threatScoreForThisEntity,
-    score: round(get('score', threatScoreForThisEntity), 5)
-  };
-
-  const impersonationForThisEntity = impersonationsForThisEntity && {
-    ...impersonationsForThisEntity,
-    impersonations: get('impersonations', impersonationsForThisEntity)
-  };
-
   return {
-    categories: categoriesWithNames,
-    threatScore: truncatedThreatScore,
-    impersonations: impersonationForThisEntity
+    categories: categoriesWithNames
   };
 };
 
-const createSummaryTags = ({ categories, threatScore, impersonations }, options) => {
-  const categoryNames = get('categoryNames', categories);
-  const roundedScore = flow(get('score'), round)(threatScore);
-  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : [];
-  const impersonationTags =
-    impersonations.impersonate && impersonations.impersonate.length
-      ? 'Impersonations Found'
-      : [];
-
-  return []
-    .concat(categoryNames || [])
-    .concat(threatScoreValue)
-    .concat(impersonationTags);
+const createSummaryTags = ({}, options) => {
+  return;
 };
 
 const getResultForThisEntityResult = (entity, results) => {
-  const resultsForThisEntity = find(
-    (result) => get('entity.value', result) === entity.value,
-    results
-  );
-
-  return get('result', resultsForThisEntity);
+  return;
 };
 
 module.exports = assembleLookupResults;

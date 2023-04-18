@@ -1,5 +1,1 @@
-const getApiEndpointQuota = require('./getApiEndpointQuota');
-
-module.exports = {
-  getApiEndpointQuota
-};
+module.exports = {};
