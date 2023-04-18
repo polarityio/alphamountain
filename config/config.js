@@ -14,6 +14,7 @@ module.exports = {
       file: './templates/block.hbs'
     }
   },
+
   request: {
     cert: '',
     key: '',
