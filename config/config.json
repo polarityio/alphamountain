@@ -1,18 +1,13 @@
 {
   "name": "alphaMountain",
-  "polarityIntegrationUuid": "c7c29ba0-de16-11ed-838b-7d68cd168940",
   "acronym": "AM",
   "description": "alphaMountain is a cutting-edge data analysis platform that harnesses the power of advanced algorithms and machine learning techniques to provide comprehensive risk scores, content categories, and possible impersonations.",
   "entityTypes": ["url"],
   "defaultColor": "light-blue",
   "styles": ["./styles/styles.less"],
   "block": {
-    "component": {
-      "file": "./components/block.js"
-    },
-    "template": {
-      "file": "./templates/block.hbs"
-    }
+    "component": { "file": "./components/block.js" },
+    "template": { "file": "./templates/block.hbs" }
   },
   "request": {
     "cert": "",
@@ -22,9 +17,7 @@
     "proxy": "",
     "rejectUnauthorized": true
   },
-  "logging": {
-    "level": "info"
-  },
+  "logging": { "level": "info" },
   "options": [
     {
       "key": "apiKey",
