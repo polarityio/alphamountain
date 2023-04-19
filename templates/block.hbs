@@ -21,10 +21,10 @@
       </div>
     </div>
   {{/if}}
-  <h1 class="p-header info-title">
+  <h1 class="p-title mt-1">
     {{fa-icon icon="tachometer-slow" fixedWidth=true}}
     <span>
-      Score Info:
+      Score Info
     </span>
   </h1>
 
@@ -81,14 +81,9 @@
 {{/if}}
 
 {{#if details.categories}}
-  {{#if details.threatScore}}
-    <hr class="section-separator" />
-  {{/if}}
-  <h1 class="p-header info-title">
-    {{fa-icon icon="layer-group" size="md" fixedWidth=true}}
-    <span>
-      Category Info:
-    </span>
+  <h1 class="p-title">
+    {{fa-icon icon="layer-group" fixedWidth=true}}
+    Category Info
   </h1>
   <div>
     <span class="p-key">
@@ -153,12 +148,9 @@
 {{/if}}
 
 {{#if (gt details.impersonations.impersonate.length 0)}}
-  <hr class="section-separator" />
-  <h1 class="p-header info-title">
-    {{fa-icon icon="binoculars" size="md" fixedWidth=true}}
-    <span>
-      Impersonations:
-    </span>
+  <h1 class="p-title">
+    {{fa-icon icon="binoculars" fixedWidth=true}}
+    Impersonations
   </h1>
   <div class="impersonations-info">
     {{#each details.impersonations.impersonate as |impersonation|}}
