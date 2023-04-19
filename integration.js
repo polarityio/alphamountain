@@ -1,48 +1,43 @@
 'use strict';
-const { validateOptions, parseUserOptions } = require('./src/userOptions');
+const { validateOptions } = require('./src/userOptions');
 const { setLogger, getLogger } = require('./src/logging');
 
 const {
-  buildIgnoreResults,
-  organizeEntities,
-  parseErrorToReadableJSON
+  parseErrorToReadableJson
 } = require('./src/dataTransformations');
 
 const searchEntities = require('./src/searchEntities');
 const assembleLookupResults = require('./src/assembleLookupResults');
 const onMessageFunctions = require('./src/onMessage');
 
-const doLookup = async (entities, userOptions, cb) => {
+const doLookup = async (entities, options, cb) => {
   const Logger = getLogger();
   try {
     Logger.debug({ entities }, 'Entities');
 
-    const { searchableEntities, nonSearchableEntities } = organizeEntities(entities);
 
-    const options = parseUserOptions(userOptions);
-
-    const { alerts, indicators, events } = await searchEntities(
-      searchableEntities,
+    const { categories, threatScore, impersonations } = await searchEntities(
+      entities,
       options
     );
+
+    Logger.trace({ categories, threatScore, impersonations }, 'Search Results');
 
     const lookupResults = assembleLookupResults(
       entities,
-      alerts,
-      indicators,
-      events,
+      categories,
+      threatScore,
+      impersonations,
       options
     );
 
-    const ignoreResults = buildIgnoreResults(nonSearchableEntities);
-
-    Logger.trace({ lookupResults, ignoreResults }, 'Lookup Results');
-    cb(null, lookupResults.concat(ignoreResults));
+    Logger.trace({ lookupResults }, 'Lookup Results');
+    cb(null, lookupResults);
   } catch (error) {
-    const err = parseErrorToReadableJSON(error);
+    const err = parseErrorToReadableJson(error);
 
     Logger.error({ error, formattedError: err }, 'Get Lookup Results Failed');
-    cb({ detail: error.message || 'Lookup Failed', err });
+    cb({ detail: error.detail || error.message || 'Lookup Failed', err });
   }
 };
 

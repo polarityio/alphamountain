@@ -74,11 +74,11 @@ const createRequestWithDefaults = () => {
 
     const requestOptionsWithoutSensitiveData = {
       ...requestOptions,
-      options: '{...}',
-      headers: {
-        ...requestOptions.headers,
-        'x-api-key': '***'
-      }
+      body : {
+        ...requestOptions.body,
+        license: 'REDACTED'
+      },
+      options: 'REDACTED',
     };
 
     Logger.trace({
@@ -91,18 +91,13 @@ const createRequestWithDefaults = () => {
     const roundedStatus = Math.round(statusCode / 100) * 100;
     const statusCodeNotSuccessful =
       !SUCCESSFUL_ROUNDED_REQUEST_STATUS_CODES.includes(roundedStatus);
-    const responseBodyErrors = get('errors.0', body);
 
-    if (statusCodeNotSuccessful || responseBodyErrors) {
-      const requestError = Error(
-        `Request Error${
-          responseBodyErrors.message ? ` -> ${responseBodyErrors.message}` : ''
-        }`
-      );
-      requestError.status = statusCodeNotSuccessful
-        ? statusCode
-        : get('extensions.code', responseBodyErrors);
-      requestError.detail = get(get('error', body), ERROR_MESSAGES);
+    if (statusCodeNotSuccessful) {
+      const requestError = Error(`Request Error`);
+      if (statusCode === 401) {
+        requestError.detail = 'Invalid API Key (Status: 401)';
+      }
+      requestError.status = statusCode;
       requestError.description = JSON.stringify(body);
       requestError.requestOptions = JSON.stringify(requestOptionsWithoutSensitiveData);
       throw requestError;

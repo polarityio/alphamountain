@@ -2,7 +2,7 @@ const { validateStringOptions } = require('./utils');
 
 const validateOptions = async (options, callback) => {
   const stringOptionsErrorMessages = {
-    TODO: '* Required'
+    apiKey: '* Required'
   };
 
   const stringValidationErrors = validateStringOptions(
@@ -10,7 +10,7 @@ const validateOptions = async (options, callback) => {
     options
   );
 
-  const errors = stringValidationErrors.concat(minSeverityError);
+  const errors = stringValidationErrors;
 
   callback(null, errors);
 };

@@ -1,9 +1,6 @@
-const getAlerts = require('./getAlerts');
-const getIndicators = require('./getIndicators');
-const getEvents = require('./getEvents');
+const getCategories = require('./getCategories');
+const getThreatScore = require('./getThreatScore');
+const getQuota = require('./getQuota');
+const getImpersonate = require('./getImpersonate');
 
-module.exports = {
-  getAlerts,
-  getIndicators,
-  getEvents
-};
+module.exports = { getCategories , getThreatScore, getQuota, getImpersonate };

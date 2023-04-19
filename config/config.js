@@ -2,10 +2,10 @@ module.exports = {
   name: 'alphaMountain',
   acronym: 'AM',
   description:
-    "TODO",
-  entityTypes: [/** TODO */],
+    'alphaMountain is a cutting-edge data analysis platform that harnesses the power of advanced algorithms and machine learning techniques to provide comprehensive risk scores, content categories, and possible impersonations.',
+  entityTypes: ['url'],
+  defaultColor: 'light-blue',
   styles: ['./styles/styles.less'],
-  defaultColor: 'light-blue', // TODO check to make sure correct color
   block: {
     component: {
       file: './components/block.js'
@@ -14,6 +14,7 @@ module.exports = {
       file: './templates/block.hbs'
     }
   },
+
   request: {
     cert: '',
     key: '',
@@ -23,15 +24,14 @@ module.exports = {
     rejectUnauthorized: true
   },
   logging: {
-    level: 'trace' //trace, debug, info, warn, error, fatal
+    level: 'info' //trace, debug, info, warn, error, fatal
   },
   options: [
     //https://github.com/polarityio/int-ui-code-reference/blob/master/user-options/config.js
     {
       key: 'apiKey',
-      name: 'Your API Token',
-      description:
-        'TODO',
+      name: 'License/API Key',
+      description: 'The License/API Key to use for accessing the alphaMountain API',
       default: '',
       type: 'password',
       userCanEdit: false,
