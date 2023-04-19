@@ -71,7 +71,7 @@ polarity.export = PolarityComponent.extend({
       })
       .finally(() => {
         this.set('getApiEndpointQuotaIsRunning', false);
-        this.set(`isRunningKeyMap.${endpoint}`, true);
+        this.set(this.isRunningKeyMap[endpoint], true);
 
         this.get('block').notifyPropertyChange('data');
         setTimeout(() => {
