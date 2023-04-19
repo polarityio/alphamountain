@@ -7,7 +7,7 @@ const searchEntities = async (entities, options) => {
     getImpersonate(entities, options)
   ]);
 
-  return { categories, threatScore, impersonations};
+  return { categories, threatScore, impersonations };
 };
 
 module.exports = searchEntities;

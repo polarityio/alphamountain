@@ -9,7 +9,7 @@ polarity.export = PolarityComponent.extend({
   gettingQuotaErrorMessage: '',
   getApiEndpointQuotaIsRunning: false,
   threatsQuotaIsRunning: false,
-  categoryQuotaIsRunning: false,
+  categoriesQuotaIsRunning: false,
   quotaInfo: {},
   isRunningKeyMap: {
     threat: 'threatsQuotaIsRunning',
