@@ -37,7 +37,7 @@ const doLookup = async (entities, options, cb) => {
     const err = parseErrorToReadableJson(error);
 
     Logger.error({ error, formattedError: err }, 'Get Lookup Results Failed');
-    cb({ detail: error.message || 'Lookup Failed', err });
+    cb({ detail: error.detail || error.message || 'Lookup Failed', err });
   }
 };
 

@@ -74,11 +74,11 @@ const createRequestWithDefaults = () => {
 
     const requestOptionsWithoutSensitiveData = {
       ...requestOptions,
-      options: '{...}',
-      headers: {
-        ...requestOptions.headers,
-        'x-api-key': '***'
-      }
+      body : {
+        ...requestOptions.body,
+        license: 'REDACTED'
+      },
+      options: 'REDACTED',
     };
 
     Logger.trace({
@@ -94,6 +94,9 @@ const createRequestWithDefaults = () => {
 
     if (statusCodeNotSuccessful) {
       const requestError = Error(`Request Error`);
+      if (statusCode === 401) {
+        requestError.detail = 'Invalid API Key (Status: 401)';
+      }
       requestError.status = statusCode;
       requestError.description = JSON.stringify(body);
       requestError.requestOptions = JSON.stringify(requestOptionsWithoutSensitiveData);
