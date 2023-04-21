@@ -1,1 +1,162 @@
-TODO
+{{#if details.threatScore}}
+  {{#if details.threatScore.score}}
+    <div class="top-section">
+      <div class="right-column">
+        <div class="score-container">
+          <div class="score-marker" style="left: calc({{threatScoreWidth}}% - 16px)">
+            <span class="fa-stack shield-with-alpha">
+              {{fa-icon icon="shield" size="md" class=threatScoreIconColor}}
+
+              <span class="alpha-symbol">
+                α
+              </span>
+            </span>
+          </div>
+          <div class="score-line"></div>
+          <div class="p-footnote score-footer">
+            Threat Score ({{details.threatScore.score}}
+            / 10)
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <h1 class="p-title mt-1">
+    {{fa-icon icon="tachometer-slow" fixedWidth=true}}
+    <span>
+      Score Info
+    </span>
+  </h1>
+
+  {{#if details.threatScore.source}}
+    <div>
+      <span class="p-key">
+        Source:
+      </span>
+      <span class="p-value">
+        {{details.threatScore.source}}&nbsp;
+      </span>
+    </div>
+  {{/if}}
+  {{#if details.threatScore.scope}}
+    <div>
+      <span class="p-key">
+        Scope:
+      </span>
+      <span class="p-value">
+        {{details.threatScore.scope}}&nbsp;
+      </span>
+    </div>
+  {{/if}}
+  {{#if quotaInfo.threat}}
+    <div class="quota-info-container">
+      <div class="quota-info">
+        Remaining Threat Queries:
+        {{quotaInfo.threat.remaining}}/{{quotaInfo.threat.daily}}
+        - Resets:
+        {{moment-format quotaInfo.threat.key_expiry "HH:mm:ss MM/DD EDT" timeZone="EDT"}}
+      </div>
+    </div>
+  {{else}}
+    <div class="message-button-container get-quota">
+      <div class="d-flex flex-row align-items-center">
+        <button
+          class="p-btn btn btn-light mt-1"
+          disabled={{or getApiEndpointQuotaIsRunning gettingQuotaErrorMessage}}
+          {{action "getApiEndpointQuota" "threat"}}
+        >
+          Remaining Queries
+          {{#if threatsQuotaIsRunning}}
+            {{fa-icon "spinner-third" fixedWidth=true spin=true}}
+          {{/if}}
+        </button>
+      </div>
+      {{#if gettingQuotaErrorMessage}}
+        <div class="alert alert-danger mt-1">
+          {{gettingQuotaErrorMessage}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+{{/if}}
+
+{{#if details.categories}}
+  <h1 class="p-title">
+    {{fa-icon icon="layer-group" fixedWidth=true}}
+    Category Info
+  </h1>
+  <div>
+    <span class="p-key">
+      Categories:
+    </span>
+    <span class="p-value">
+      {{join ", " details.categories.categoryNames}}
+    </span>
+  </div>
+
+  <div>
+    <span class="p-key">
+      Confidence:
+    </span>
+    <span class="p-value">
+      {{details.categories.confidence}}&nbsp;
+    </span>
+  </div>
+
+  <div>
+    <span class="p-key">
+      Scope:
+    </span>
+    <span class="p-value">
+      {{titleize details.categories.scope}}&nbsp;
+    </span>
+  </div>
+  {{#if quotaInfo.category}}
+    <div class="quota-info-container">
+      <div class="quota-info">
+        Remaining Category Queries:
+        {{quotaInfo.category.remaining}}/{{quotaInfo.category.daily}}
+        - Resets:
+        {{moment-format
+          quotaInfo.category.key_expiry
+          "HH:mm:ss MM/DD EDT"
+          timeZone=timezone
+        }}
+      </div>
+    </div>
+  {{else}}
+    <div class="message-button-container get-quota">
+      <div class="d-flex flex-row align-items-center">
+        <button
+          class="p-btn btn btn-light mt-1"
+          disabled={{or getApiEndpointQuotaIsRunning gettingQuotaErrorMessage}}
+          {{action "getApiEndpointQuota" "category"}}
+        >
+          Remaining Queries
+          {{#if categoriesQuotaIsRunning}}
+            {{fa-icon "spinner-third" fixedWidth=true spin=true}}
+          {{/if}}
+        </button>
+      </div>
+      {{#if gettingQuotaErrorMessage}}
+        <div class="alert alert-danger mt-1">
+          {{gettingQuotaErrorMessage}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+{{/if}}
+
+{{#if (gt details.impersonations.impersonate.length 0)}}
+  <h1 class="p-title">
+    {{fa-icon icon="binoculars" fixedWidth=true}}
+    Impersonations
+  </h1>
+  <div class="impersonations-info">
+    {{#each details.impersonations.impersonate as |impersonation|}}
+      <div class="impersonation-info">
+        {{impersonation}}
+      </div>
+    {{/each}}
+  </div>
+{{/if}}

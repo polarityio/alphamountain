@@ -30,8 +30,9 @@ const flattenOptions = (options) =>
 
 const validateStringOptions = (stringOptionsErrorMessages, options, otherErrors = []) =>
   reduce((agg, message, optionName) => {
-    const isString = typeof options[optionName].value === 'string';
-    const isEmptyString = isString && isEmpty(options[optionName].value);
+    const optionValue = get([optionName, 'value'], options)
+    const isString = typeof optionValue === 'string';
+    const isEmptyString = isString && isEmpty(optionValue);
 
     return !isString || isEmptyString
       ? agg.concat({

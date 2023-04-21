@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^3.2.4",
     "lodash": "^4.17.21",
-    "postman-request": "^2.88.1-postman.31"
+    "moment": "^2.29.4",
+    "postman-request": "^2.88.1-postman.32"
   }
 }

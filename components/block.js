@@ -1,36 +1,66 @@
 polarity.export = PolarityComponent.extend({
   details: Ember.computed.alias('block.data.details'),
   timezone: Ember.computed('Intl', function () {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const time = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return time;
   }),
-  activeTab: 'TODO',
+
   gettingQuotaMessage: '',
   gettingQuotaErrorMessage: '',
   getApiEndpointQuotaIsRunning: false,
+  threatsQuotaIsRunning: false,
+  categoriesQuotaIsRunning: false,
+  quotaInfo: {},
+  isRunningKeyMap: {
+    threat: 'threatsQuotaIsRunning',
+    category: 'categoriesQuotaIsRunning'
+  },
+  redThreat: '#ed2e4d',
+  greenThreat: '#7dd21b',
+  yellowThreat: '#ffc15d',
 
-  init() {
-    //TODO use or remove
-    this._super(...arguments);
+  threatScoreWidth: Ember.computed('details.threatScore.score', function () {
+    return this.get('details.threatScore.score') * 10;
+  }),
+  threatScoreIconColor: Ember.computed('details.threatScore.score', function () {
+    let score = this.get('details.threatScore.score');
+    if (score > 4) {
+      return 'high-risk';
+    }
+    if (score > 2) {
+      return 'warning-risk';
+    }
+
+    return 'low-risk';
+  }),
+
+  actions: {
+    getApiEndpointQuota: function (endpoint) {
+      this.getApiEndpointQuota(endpoint);
+    }
   },
 
-  getApiEndpointQuota: function () {
-    const outerThis = this;
-
-    this.set('gettingQuotaMessage', '');
+  getApiEndpointQuota: function (endpoint) {
     this.set('gettingQuotaErrorMessage', '');
     this.set('getApiEndpointQuotaIsRunning', true);
 
+    this.set(this.isRunningKeyMap[endpoint], true);
+
+    // Pass the data to the integration
     this.sendIntegrationMessage({
       action: 'getApiEndpointQuota',
       data: {
-        //TODO
+        endpoint
       }
     })
-      .then(({  }) => {
-        // TODO
+      .then((quota) => {
+        this.set(
+          'quotaInfo',
+          Object.assign({}, this.get('quotaInfo'), { [endpoint]: quota })
+        );
       })
       .catch((err) => {
-        outerThis.set(
+        this.set(
           'gettingQuotaErrorMessage',
           `Failed to Get Quota: ${
             (err &&
@@ -41,19 +71,15 @@ polarity.export = PolarityComponent.extend({
       })
       .finally(() => {
         this.set('getApiEndpointQuotaIsRunning', false);
-        outerThis.get('block').notifyPropertyChange('data');
+        this.set(this.isRunningKeyMap[endpoint], true);
+
+        this.get('block').notifyPropertyChange('data');
         setTimeout(() => {
-          outerThis.set('gettingQuotaMessage', '');
-          outerThis.set('gettingQuotaErrorMessage', '');
-          outerThis.get('block').notifyPropertyChange('data');
+          if (!this.get('isDestroyed')) {
+            this.set('gettingQuotaErrorMessage', '');
+            this.get('block').notifyPropertyChange('data');
+          }
         }, 5000);
       });
-  },
-  actions: {
-    changeTab: function (tabName) {
-      this.set('activeTab', tabName);
-
-      this.get('block').notifyPropertyChange('data');
-    }
   }
 });

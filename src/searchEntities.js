@@ -1,22 +1,13 @@
-const {
-  getAlerts,
-  getIndicators,
-  getEvents
-} = require('./queries');
+const { getCategories, getThreatScore, getImpersonate } = require('./queries');
 
 const searchEntities = async (entities, options) => {
-  const [alerts, indicators] = await Promise.all([
-    getAlerts(entities, options),
-    getIndicators(entities, options)
+  const [categories, threatScore, impersonations] = await Promise.all([
+    getCategories(entities, options),
+    getThreatScore(entities, options),
+    getImpersonate(entities, options)
   ]);
 
-  const events = await getEvents(alerts, options);
-
-  return {
-    alerts,
-    indicators,
-    events
-  };
+  return { categories, threatScore, impersonations };
 };
 
 module.exports = searchEntities;

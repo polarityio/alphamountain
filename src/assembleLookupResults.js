@@ -1,16 +1,23 @@
-const { flow, get, size, find, eq, map, some, keys } = require('lodash/fp');
-
-const assembleLookupResults = (entities, alerts, indicators, events, options) =>
+const { flow, get, size, find, map, some, getOr } = require('lodash/fp');
+const { round } = require('./dataTransformations');
+const { CATAGORYID_BY_CATAGORYNAME } = require('./constants');
+const assembleLookupResults = (
+  entities,
+  categories,
+  threatScore,
+  impersonations,
+  options
+) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
       entity,
-      alerts,
-      indicators,
-      events,
+      categories,
+      threatScore,
+      impersonations,
       options
     );
 
-    const resultsFound = flow(some(flow(keys, size)))(resultsForThisEntity);
+    const resultsFound = some(size, resultsForThisEntity);
 
     const lookupResult = {
       entity,
@@ -25,21 +32,71 @@ const assembleLookupResults = (entities, alerts, indicators, events, options) =>
     return lookupResult;
   }, entities);
 
-const getResultsForThisEntity = (entity, alerts, indicators, events, options) => {
-  const getResultForThisEntityResult = (results) =>
-    flow(find(flow(get('entity.value'), eq(entity.value))), get('result'))(results);
+const getResultsForThisEntity = (
+  entity,
+  categories,
+  threatScore,
+  impersonations,
+  options
+) => {
+  const categoriesForThisEntity = getResultForThisEntityResult(entity, categories);
+
+  const threatScoreForThisEntity = getResultForThisEntityResult(entity, threatScore);
+
+  const impersonationsForThisEntity = getResultForThisEntityResult(
+    entity,
+    impersonations
+  );
+
+  const categoriesWithNames =
+    categoriesForThisEntity &&
+    flow(
+      get('categories'),
+      map((categoryId) =>
+        getOr(`ID - ${categoryId}`, categoryId, CATAGORYID_BY_CATAGORYNAME)
+      ),
+      (categoryNames) => ({ ...categoriesForThisEntity, categoryNames })
+    )(categoriesForThisEntity);
+
+  const truncatedThreatScore = threatScoreForThisEntity && {
+    ...threatScoreForThisEntity,
+    score: round(get('score', threatScoreForThisEntity), 5)
+  };
+
+  const impersonationForThisEntity = impersonationsForThisEntity && {
+    ...impersonationsForThisEntity,
+    impersonations: get('impersonations', impersonationsForThisEntity)
+  };
 
   return {
-    alerts: getResultForThisEntityResult(alerts),
-    indicators: getResultForThisEntityResult(indicators),
-    events: getResultForThisEntityResult(events)
+    categories: categoriesWithNames,
+    threatScore: truncatedThreatScore,
+    impersonations: impersonationForThisEntity
   };
 };
 
-const createSummaryTags = ({ alerts, indicators, events }, options) =>
-  []
-  .concat(size(alerts) ? `Alerts: ${size(alerts)}` : [])
-  .concat(size(indicators) ? `Indicators: ${size(indicators)}` : [])
-  .concat(size(events) ? `Events: ${size(events)}` : []);
+const createSummaryTags = ({ categories, threatScore, impersonations }, options) => {
+  const categoryNames = get('categoryNames', categories);
+  const roundedScore = flow(get('score'), round)(threatScore);
+  const threatScoreValue = roundedScore ? `Score: ${roundedScore}` : [];
+  const impersonationTags =
+    impersonations.impersonate && impersonations.impersonate.length
+      ? 'Impersonations Found'
+      : [];
+
+  return []
+    .concat(categoryNames || [])
+    .concat(threatScoreValue)
+    .concat(impersonationTags);
+};
+
+const getResultForThisEntityResult = (entity, results) => {
+  const resultsForThisEntity = find(
+    (result) => get('entity.value', result) === entity.value,
+    results
+  );
+
+  return get('result', resultsForThisEntity);
+};
 
 module.exports = assembleLookupResults;
