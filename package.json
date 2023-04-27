@@ -1,7 +1,7 @@
 {
-  "main": "./integration.js",
   "name": "alphamountain",
-  "version": "3.0.0-beta",
+  "version": "3.0.1",
+  "main": "./integration.js",
   "private": true,
   "license": "MIT",
   "author": "Polarity",
